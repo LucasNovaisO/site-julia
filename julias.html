@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="julias.css">
+    <footer class="cabeca"></footer>
+        <hr>
+        <div class="frase"><h1>Este é o site dos haters de Julias</h1></div>
+</head>
+<body>
+    <div class="cadastro-container">
+        <h2>Cadastre-se e compartilhe sua experiência com Julia</h2>
+        <form id="cadastro-form">
+            <label for="nome">Nome:</label><br>
+            <input type="text" id="nome" name="nome" required><br><br>
+
+            <label for="email">E-mail:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="experiencia">Minha experiência com Julia:</label><br>
+            <textarea id="experiencia" name="experiencia" rows="4" cols="50" required></textarea><br><br>
+
+            <button type="button" id="enviar-btn">Enviar</button>
+        </form>
+        <div id="mensagem-central" style="display: none;">
+            <p id="mensagem-texto"></p>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="raiva"><center><font size="25">Porque temos raiva das julias?(em especial a <font color="red">Julia Santos)</font></center>)</h1></div>
+    <br>
+    <br>
+    <br>
+    <div class="topicos-container">
+        <div class="topicos"><h2>1. Tópico <br>
+            Sabem cozinhar, e logo irão fazer exibir 
+            suas habilidades culinárias, enquanto você não sabe nem fritar um ovo. <br>
+            <img src="brownie.jpg" alt="" width="100px" height="100px"></h2></div>
+        <div class="topicos"><h2>2. Tópico <br>
+        Elas ficam jogando tomates em voçê por tudo <br> <img src="tomates.jpg" alt="" height="250px" width="200px"></h2></div>
+        <div class="topicos"><h2>3. Tópico 
+        Dão semanas de vacuos e somem igual seu pai caros haters <br><img src="vacuo j.jpg" alt="" height="150px" width="200px"></h2></div>
+        <div class="topicos"><h2>4. Tópico
+        Julia e um ciclo sem fim de pessoas preparadas para te tratar mal.</h2></div>
+    </div>
+    <hr>
+    <div class="associacao-container">
+        <p>Precisar se vingar de uma Julia? Temos uma associação no WhatsApp, basta adicionar o número: <strong>(11) 94511-2538</strong> 
+            <img src="wpplogo.avif" alt="Logo do WhatsApp" class="logo" width="30px" height="30px">
+        </p>
+        <p>e no Instagram siga a conta: <strong>kkl.novais</strong> 
+            <img src="logo insta.webp" alt="Logo do Instagram" class="logo" width="30px" height="30px">
+        </p>
+    </div>
+        <hr>
+    <div class="topicos-container1">
+        <div class="topicos"><h2>E aqui temos a cara da meliante em 2020 <br>
+        Elas são tão ruins que até o Google não gosta delas, veja: <br>
+        <img src="julia.jpg" alt="" width="400px" height="200px">
+        o Instagram da meliante é: @vjusantos</h2></div>
+
+
+    <script>
+    document.getElementById('enviar-btn').addEventListener('click', function () {
+        const nome = document.getElementById('nome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const experiencia = document.getElementById('experiencia').value.trim();
+        const mensagemCentral = document.getElementById('mensagem-central');
+        const mensagemTexto = document.getElementById('mensagem-texto');
+
+        if (nome && email && experiencia) {
+            // Verifica se o nome ou e-mail contém "julia" (case insensitive)
+            const nomeLower = nome.toLowerCase();
+            const emailLower = email.toLowerCase();
+
+            if (nomeLower.includes('julia') || emailLower.includes('julia')) {
+                mensagemTexto.textContent = 'Nós somos seus haters!';
+            } else {
+                mensagemTexto.textContent = `Caro(a) ${nome}, lamento por essa Julia.`;
+            }
+
+            // Exibe a mensagem no centro da tela
+            mensagemCentral.style.display = 'block';
+
+            // Oculta a mensagem após 3 segundos
+            setTimeout(() => {
+                mensagemCentral.style.display = 'none';
+            }, 3000);
+
+            // Limpa o formulário
+            document.getElementById('cadastro-form').reset();
+        } else {
+            alert('Por favor, preencha todos os campos!');
+        }
+    });
+</script>
+<footer class="footer-direitos">
+    <p>&copy; 2025 Lucas Novais. Todos os direitos reservados.</p>
+</footer>
+</body>
+</html>
