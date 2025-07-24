@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <br>
+    <div class="feedback"></div>
     <br>
     <br>
     <br>
@@ -41,16 +41,18 @@
     <br>
     <br>
     <div class="topicos-container">
-        <div class="topicos"><h2>1. Tópico <br>
+        <div class="topicos"><h2>1. Tópico: <br>
             Sabem cozinhar, e logo irão fazer exibir 
             suas habilidades culinárias, enquanto você não sabe nem fritar um ovo. <br>
             <img src="brownie.jpg" alt="" width="100px" height="100px"></h2></div>
-        <div class="topicos"><h2>2. Tópico <br>
+        <div class="topicos"><h2>2.Tópico: <br>
         Elas ficam jogando tomates em voçê por tudo <br> <img src="tomates.jpg" alt="" height="250px" width="200px"></h2></div>
-        <div class="topicos"><h2>3. Tópico 
+        <div class="topicos"><h2>3. Tópico: <br>
         Dão semanas de vacuos e somem igual seu pai caros haters <br><img src="vacuo j.jpg" alt="" height="150px" width="200px"></h2></div>
-        <div class="topicos"><h2>4. Tópico
+        <div class="topicos"><h2>4. Tópico: <br>
         Julia e um ciclo sem fim de pessoas preparadas para te tratar mal.</h2></div>
+        <div class="topicos"><h2>5. Tópico: <br> Grosseiras a todo nivel, do mais simples ao mais alto</h2></div>
+        <div class="topicos"><h2>6. Tópico: <br> São extremamentes fechadas, é um grande desafio elas desabafarem com vc <br></h2></div>
     </div>
     <hr>
     <div class="associacao-container">
@@ -67,9 +69,49 @@
         Elas são tão ruins que até o Google não gosta delas, veja: <br>
         <img src="julia.jpg" alt="" width="400px" height="200px">
         o Instagram da meliante é: @vjusantos</h2></div>
+</div> <!-- fecha .topicos-container1 -->
 
+<hr style="margin: 50px 0; border: 2px dashed #e96a6a;">
+
+<div class="feedback-area">
+    <h2>Feedbacks sobre Julias</h2>
+    <div class="feedback-form">
+        <h3>Avalie uma Julia</h3>
+        <form id="form-feedback">
+            <label for="nome-julia">Nome da Julia:</label><br>
+            <input type="text" id="nome-julia" name="nome-julia" required><br><br>
+            
+            <label for="avaliacao">Avaliação:</label><br>
+            <textarea id="avaliacao" name="avaliacao" rows="3" required></textarea><br><br>
+            
+            <label for="foto-julia">Foto da Julia:</label><br>
+            <input type="file" id="foto-julia" name="foto-julia" accept="image/*"><br><br>
+            
+            <label for="estrelas">Nota:</label><br>
+            <div id="estrelas-input" class="estrelas-input">
+                <!-- estrelas serão geradas pelo JS -->
+            </div>
+            <input type="hidden" id="nota-estrela" name="nota-estrela" value="0"><br><br>
+            
+            <button type="submit">Enviar Avaliação</button>
+        </form>
+    </div>
+    <div class="feedback-list">
+        <h3>Feedbacks Registrados</h3>
+        <div id="lista-feedbacks"></div>
+    </div>
+</div>
 
     <script>
+    // Função para remover acentos e espaços
+    function normalizar(str) {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "")
+            .toLowerCase();
+    }
+
     document.getElementById('enviar-btn').addEventListener('click', function () {
         const nome = document.getElementById('nome').value.trim();
         const email = document.getElementById('email').value.trim();
@@ -78,30 +120,175 @@
         const mensagemTexto = document.getElementById('mensagem-texto');
 
         if (nome && email && experiencia) {
-            // Verifica se o nome ou e-mail contém "julia" (case insensitive)
-            const nomeLower = nome.toLowerCase();
-            const emailLower = email.toLowerCase();
+            const nomeNormalizado = normalizar(nome);
+            const emailNormalizado = normalizar(email);
 
-            if (nomeLower.includes('julia') || emailLower.includes('julia')) {
-                mensagemTexto.textContent = 'Nós somos seus haters!';
+            // Lista de palavras proibidas
+            const proibidos = ["julia", "júlia", "ju", "juju"];
+
+            // Verifica se é "julia santos"
+            if (nomeNormalizado === "juliasantos") {
+                mensagemTexto.textContent = "Oi cachinhos, vc ainda nao esta na excessao";
+            }
+            // Verifica se nome ou email contém qualquer palavra proibida
+            else if (
+                proibidos.some(palavra => nomeNormalizado.includes(normalizar(palavra))) ||
+                proibidos.some(palavra => emailNormalizado.includes(normalizar(palavra)))
+            ) {
+                mensagemTexto.textContent = 'vc nao engana o sistema, somos seus haters e sabemos que você é uma Julia disfarçada!';
             } else {
                 mensagemTexto.textContent = `Caro(a) ${nome}, lamento por essa Julia.`;
             }
 
-            // Exibe a mensagem no centro da tela
             mensagemCentral.style.display = 'block';
-
-            // Oculta a mensagem após 3 segundos
             setTimeout(() => {
                 mensagemCentral.style.display = 'none';
             }, 3000);
 
-            // Limpa o formulário
             document.getElementById('cadastro-form').reset();
         } else {
             alert('Por favor, preencha todos os campos!');
         }
     });
+
+    // Gera as estrelas para avaliação
+function gerarEstrelasInput() {
+    const estrelasDiv = document.getElementById('estrelas-input');
+    estrelasDiv.innerHTML = '';
+    for (let i = 1; i <= 5; i++) {
+        const span = document.createElement('span');
+        span.className = 'estrela';
+        span.innerHTML = '★';
+        span.dataset.valor = i;
+        span.onclick = function() {
+            document.getElementById('nota-estrela').value = i;
+            atualizarEstrelasInput(i);
+        };
+        estrelasDiv.appendChild(span);
+    }
+}
+function atualizarEstrelasInput(valor) {
+    const estrelas = document.querySelectorAll('#estrelas-input .estrela');
+    estrelas.forEach((estrela, idx) => {
+        estrela.classList.toggle('selecionada', idx < valor);
+    });
+}
+gerarEstrelasInput();
+
+document.getElementById('form-feedback').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nome = document.getElementById('nome-julia').value.trim();
+    const avaliacao = document.getElementById('avaliacao').value.trim();
+    const fotoInput = document.getElementById('foto-julia');
+    const nota = parseInt(document.getElementById('nota-estrela').value, 10) || 0;
+    const lista = document.getElementById('lista-feedbacks');
+
+    let imgTag = '';
+    if (fotoInput.files && fotoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            imgTag = `<img src="${evt.target.result}" alt="Foto da Julia">`;
+            adicionarFeedback(nome, avaliacao, imgTag, nota, lista);
+        };
+        reader.readAsDataURL(fotoInput.files[0]);
+    } else {
+        adicionarFeedback(nome, avaliacao, '', nota, lista);
+    }
+
+    this.reset();
+    atualizarEstrelasInput(0);
+    document.getElementById('nota-estrela').value = 0;
+});
+
+function adicionarFeedback(nome, avaliacao, imgTag, nota, lista) {
+    const div = document.createElement('div');
+    div.className = 'feedback-item';
+    div.innerHTML = `
+        ${imgTag}
+        <div class="feedback-content">
+            <strong>${nome}</strong><br>
+            <span>${avaliacao}</span><br>
+            <span class="estrelas">${'★'.repeat(nota)}${'☆'.repeat(5-nota)}</span>
+        </div>
+        <button class="delete-btn" title="Deletar feedback">Excluir</button>
+    `;
+    div.querySelector('.delete-btn').onclick = function() {
+        div.remove();
+    };
+    lista.prepend(div);
+}
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCK11I2erX8Z3PSfKUtBrE8_k6Cyrbc_2U",
+    authDomain: "site-brincadeira.firebaseapp.com",
+    projectId: "site-brincadeira",
+    storageBucket: "site-brincadeira.appspot.com",
+    messagingSenderId: "177796306154",
+    appId: "1:177796306154:web:4adec58f6d912d003cf393",
+    measurementId: "G-NE48VQW872"
+  };
+
+  // Inicializa Firebase e Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Função para adicionar feedback
+  async function salvarFeedback(nome, avaliacao, imgBase64, nota) {
+    await addDoc(collection(db, "feedbacks"), {
+      nome,
+      avaliacao,
+      imgBase64,
+      nota,
+      timestamp: serverTimestamp()
+    });
+  }
+
+  // Função para deletar feedback
+  async function deletarFeedback(id) {
+    await deleteDoc(doc(db, "feedbacks", id));
+  }
+
+
+  // Escuta em tempo real os feedbacks
+  const q = query(collection(db, "feedbacks"), orderBy("timestamp", "desc"));
+  onSnapshot(q, renderizarFeedbacks);
+
+  // Lida com o envio do formulário
+  document.getElementById('form-feedback').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nome = document.getElementById('nome-julia').value.trim();
+    const avaliacao = document.getElementById('avaliacao').value.trim();
+    const fotoInput = document.getElementById('foto-julia');
+    const nota = parseInt(document.getElementById('nota-estrela').value, 10) || 0;
+
+    if (fotoInput.files && fotoInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        salvarFeedback(nome, avaliacao, evt.target.result, nota);
+      };
+      reader.readAsDataURL(fotoInput.files[0]);
+    } else {
+      salvarFeedback(nome, avaliacao, '', nota);
+    }
+
+    this.reset();
+    atualizarEstrelasInput(0);
+    document.getElementById('nota-estrela').value = 0;
+  });
+
+  // Função de estrelas (mantenha igual ao seu JS atual)
+  function atualizarEstrelasInput(valor) {
+    const estrelas = document.querySelectorAll('#estrelas-input .estrela');
+    estrelas.forEach((estrela, idx) => {
+      estrela.classList.toggle('selecionada', idx < valor);
+    });
+  }
 </script>
 <footer class="footer-direitos">
     <p>&copy; 2025 Lucas Novais. Todos os direitos reservados.</p>
