@@ -254,6 +254,27 @@ function adicionarFeedback(nome, avaliacao, imgTag, nota, lista) {
     await deleteDoc(doc(db, "feedbacks", id));
   }
 
+  // Função para renderizar feedbacks
+  function renderizarFeedbacks(snapshot) {
+    const lista = document.getElementById('lista-feedbacks');
+    lista.innerHTML = '';
+    snapshot.forEach(docSnap => {
+      const fb = docSnap.data();
+      const div = document.createElement('div');
+      div.className = 'feedback-item';
+      div.innerHTML = `
+        ${fb.imgBase64 ? `<img src="${fb.imgBase64}" alt="Foto da Julia">` : ''}
+        <div class="feedback-content">
+          <strong>${fb.nome}</strong><br>
+          <span>${fb.avaliacao}</span><br>
+          <span class="estrelas">${'★'.repeat(fb.nota || 0)}${'☆'.repeat(5-(fb.nota || 0))}</span>
+          <button class="delete-btn">Excluir</button>
+        </div>
+      `;
+      div.querySelector('.delete-btn').onclick = () => deletarFeedback(docSnap.id);
+      lista.prepend(div);
+    });
+  }
 
   // Escuta em tempo real os feedbacks
   const q = query(collection(db, "feedbacks"), orderBy("timestamp", "desc"));
